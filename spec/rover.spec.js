@@ -9,16 +9,25 @@ const Command = require('../command.js');
 describe("Rover class", function() {
   // 7 tests here!
   // Test 7
-  // it("constructor sets position and default values for mode and generatorWatts", function() {
-  //   expect( function() { 
-  //     new Rover();
-  //     }).toThrow(new Error(''));
-  // });
+  it("constructor sets position and default values for mode and generatorWatts", function() {
+    let rover = new Rover(98382);
+    expect(rover.position).toEqual(98382);
+    expect(rover.mode).toEqual('NORMAL');
+    expect(rover.generatorWatts).toEqual(110);
+  });
 
   // Test 8
-  // it("response returned by receiveMessage contains name of message", function() {
+  it("response returned by receiveMessage contains name of message", function() {
+    /*Command --> Message --> Rover
+    MESSAGE bundles COMMAND to send to ROVER 
+    ROVER receives MESSAGE object and returns results*/
+    let commands = [new Command('MODE_CHANGE', 'LOW_POWER')];
+    let message = new Message('This is a new message.', commands);
+    let rover = new Rover(message.commands.value);
+    let response = rover.receiveMessage(message);
+    expect(response.message).toEqual('This is a new message.');
+  });
 
-  // });
 
   // Test 9
   // it("response returned by receiveMessage includes two results if two commands are sent in the message", function() {
@@ -47,8 +56,3 @@ describe("Rover class", function() {
 
 });
 
-// Example test code - DELETE
-  // it("throws error if a name is NOT passed into the constructor as the first parameter", function() {
-  //   expect( function() { 
-  //     new Message();
-  //     }).toThrow(new Error('Message name required.'));
